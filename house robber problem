@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int solver(int i,vector<int> &hvals, int n, vector<int>&dp) {
+
+    if (i<0) {
+        return 0;
+    }
+
+    if (i==0) {
+        return hvals[0];
+    }
+
+    if (dp[i]!=-1) {
+        return dp[i];
+    }
+
+    int rob = hvals[i] + solver(i-2,hvals,n,dp);
+
+    int skip = solver(i-1,hvals,n,dp);
+
+    return dp[i] = max(skip,rob);
+}
+
+
+
+int solve(vector<int> &hvals, int n) {
+    vector<int>dp(n,-1);
+    return solver(n-1,hvals,n,dp);
+}
+
+int main() {
+    vector<int> hvals = {6,7,1,3,8,2,4};
+    int n = 7;
+
+    int result = solve(hvals,n);
+
+    cout<<result<<endl;
+
+return 0;}
