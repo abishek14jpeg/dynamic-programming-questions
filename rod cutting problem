@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int solver(int cut,vector<int>&prices, int n,vector<int>&dp) {
+
+    if (n==0) {
+        return 0;
+    }
+
+    if (cut>n) {
+        return INT_MIN;
+    }
+
+    if(dp[n]!=-1) {
+        return dp[n];
+    }
+
+    int profit_with_cut = prices[cut-1] + solver(1,prices,n-cut,dp);
+
+    int profit_without_cut = solver(cut+1,prices,n,dp);
+
+    int max_profit = max(profit_without_cut,profit_with_cut);
+
+    dp[n] = max_profit;
+
+    return dp[n];
+}
+
+int solve(vector<int>&prices, int n) {
+    vector<int> dp(n+1,-1);
+    return solver(1,prices,n,dp);
+}
+
+int main() {
+
+    vector<int> prices = {1,5,8,9};
+    int n = 4;
+    int result = solve(prices,n);
+    cout<<result<<endl;
+
+    return 0;
+}
