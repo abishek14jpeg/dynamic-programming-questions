@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+// Recursive function with memoization
+int solve(int n, int k, vector<vector<int>>& dp) {
+    // Base cases
+    if (k == 0 || k == 1)
+        return k;
+    if (n == 1)
+        return k;
+
+    // Return cached value if already computed
+    if (dp[n][k] != -1)
+        return dp[n][k];
+
+    int ans = INT_MAX;
+
+    // Try dropping from each floor x (1 to k)
+    for (int x = 1; x <= k; ++x) {
+        int breaks = solve(n - 1, x - 1, dp);     // Egg breaks
+        int doesntBreak = solve(n, k - x, dp);    // Egg survives
+
+        int worst = 1 + max(breaks, doesntBreak);
+        ans = min(ans, worst);
+    }
+
+    return dp[n][k] = ans;
+}
+
+int superEggDrop(int n, int k) {
+    vector<vector<int>> dp(n + 1, vector<int>(k + 1, -1));
+    return solve(n, k, dp);
+}
+
+int main() {
+    int n = 2; // Number of eggs
+    int k = 10; // Number of floors
+    cout << "Minimum number of attempts: " << superEggDrop(n, k) << endl;
+    return 0;
+}
