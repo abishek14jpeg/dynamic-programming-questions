@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int solver(int i,int w, vector<int>&weights, vector<int>&profits, vector<vector<int>>&dp) {
+
+    if (i==0 || w==0) {
+        return 0;
+    }
+
+    if (dp[i][w]!=-1) {
+        return dp[i][w];
+    }
+
+    if (weights[i]>w) {
+        return solver(i-1,w,weights,profits,dp);
+    }
+
+    return dp[i][w] = max(solver(i-1,w,weights,profits,dp),profits[i] + solver(i-1,w-weights[i],weights,profits,dp));
+}
+
+int solve(int w,vector<int>&weights, vector<int>&profits) {
+
+    int n = weights.size();
+
+    vector<vector<int>> dp(n+1,vector<int>(w+1,-1));
+
+    return solver(n,w,weights,profits,dp);
+
+}
+
+
+int main() {
+    int W = 4;
+    vector<int> weights = {4, 5, 1};
+    vector<int> profit = {1,2,3};
+
+    cout<<solve(W,weights,profit)<<endl;
+
+return 0;}
