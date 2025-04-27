@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int solver(int i, int j, vector<int>&array, vector<vector<int>>&dp) {
+
+    if (i==j) {
+        return 0;
+    }
+
+    if(dp[i][j]!=-1) {
+        return dp[i][j];
+    }
+
+    int min_cost = INT_MAX;
+
+    for(int k=i; k<j; k++) {
+        int cost = solver(i,k,array,dp) + solver(k+1,j,array,dp) + (array[i-1]*array[j]*array[k]);
+        min_cost = min(min_cost, cost);
+    }
+
+    dp[i][j] = min_cost;
+    return dp[i][j];
+}
+
+int solve(vector<int> &array) {
+    int n = array.size();
+    vector<vector<int>> dp(n,vector<int>(n,-1));
+    return solver(1,n-1,array,dp);
+}
+
+int main() {
+
+    vector<int> v = {1,2,3,4,3};
+    cout<<solve(v);
+
+    return 0;}
